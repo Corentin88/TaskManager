@@ -1,4 +1,5 @@
 const tasks = [];
+const taskFilter = document.querySelector("#taskFilter");
 
 function addTask(title, priority) {
   const newTask = {
@@ -12,10 +13,10 @@ function addTask(title, priority) {
   return newTask;
 }
 
-function renderTasks() {
+function renderTasks(filterToRender) {
   const taskList = document.querySelector("#taskList");
   taskList.textContent = "";
-  tasks.forEach((task) => {
+  filterToRender.forEach((task) => {
     const liElement = document.createElement("li");
     const titleElement = document.createElement("span");
     const priorityElement = document.createElement("span");
@@ -40,18 +41,19 @@ function renderTasks() {
       task.completed = checkbox.checked;
       styleRender(checkbox, titleElement);
       saveTasks();
+      renderTasks(filterTasks(taskFilter.value));
     });
     deleteButton.addEventListener("click", () => {
       const taskId = task.id;
       const taskIndex = tasks.findIndex((item) => taskId === item.id);
       const result = confirm("Etes vous sur de vouloir supprimer");
-      if (result === false){
+      if (result === false) {
         return;
       }
       tasks.splice(taskIndex, 1);
-    
+
       saveTasks();
-      renderTasks();
+      renderTasks(filterTasks(taskFilter.value));
     });
   });
 }
@@ -92,7 +94,7 @@ function loadTasks() {
 const loadedTasks = loadTasks();
 tasks.push(...loadedTasks);
 
-renderTasks();
+renderTasks(filterTasks(taskFilter.value));
 
 const form = document.querySelector("#taskForm");
 const titleInput = document.querySelector("#taskTitle");
@@ -107,7 +109,7 @@ form.addEventListener("submit", (event) => {
   }
   addTask(title, priority);
   saveTasks();
-  renderTasks();
+  renderTasks(filterTasks(taskFilter.value));
   titleInput.value = "";
   priorityInput.value = "low";
   console.log(tasks);
@@ -118,3 +120,17 @@ function styleRender(checkbox, titleElement) {
     ? "line-through"
     : "none";
 }
+
+function filterTasks(filter) {
+  if (filter === "completed") {
+    return tasks.filter((task) => task.completed === true);
+  } else if (filter === "pending") {
+    return tasks.filter((task) => !task.completed);
+  } else {
+    return tasks;
+  }
+}
+
+taskFilter.addEventListener("change", () => {
+  renderTasks(filterTasks(taskFilter.value));
+});
