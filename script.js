@@ -1,5 +1,7 @@
 const tasks = [];
 const taskFilter = document.querySelector("#taskFilter");
+let taskToEdit = null;
+const submitButton = document.querySelector("#submit");
 
 function addTask(title, priority) {
   const newTask = {
@@ -55,6 +57,18 @@ function renderTasks(filterToRender) {
       saveTasks();
       renderTasks(filterTasks(taskFilter.value));
     });
+    const editButton = document.createElement("button");
+    editButton.textContent = "Modifier";
+    liElement.appendChild(editButton);
+    editButton.addEventListener("click", () => {
+      submitButton.textContent = "Modifier";
+      const taskId = task.id;
+      const taskIndex = tasks.findIndex((item) => taskId === item.id);
+      titleInput.value = tasks[taskIndex].title;
+      priorityInput.value = tasks[taskIndex].priority;
+      taskToEdit = taskId;
+      console.log("🚀 ~ renderTasks ~ taskToEdit:", taskToEdit);
+    });
   });
 }
 
@@ -81,8 +95,6 @@ function formatDate(date) {
 function saveTasks() {
   const data = JSON.stringify(tasks);
   localStorage.setItem("tasks", data);
-  console.log(data);
-  console.log(localStorage);
 }
 
 function loadTasks() {
@@ -107,7 +119,16 @@ form.addEventListener("submit", (event) => {
   if (title === "") {
     return alert("Veuillez entrer un titre");
   }
-  addTask(title, priority);
+
+  if (taskToEdit) {
+    const taskIndex = tasks.findIndex((item) => taskToEdit === item.id);
+    tasks[taskIndex].title = title;
+    tasks[taskIndex].priority = priority;
+    taskToEdit = null;
+    submitButton.textContent = "Valider";
+  } else {
+    addTask(title, priority);
+  }
   saveTasks();
   renderTasks(filterTasks(taskFilter.value));
   titleInput.value = "";
