@@ -21,22 +21,37 @@ function renderTasks() {
     const priorityElement = document.createElement("span");
     const dateElement = document.createElement("span");
     const checkbox = document.createElement("input");
+    const deleteButton = document.createElement("button");
+    deleteButton.textContent = "Supprimer";
     titleElement.textContent = task.title;
     priorityElement.textContent = task.priority;
     dateElement.textContent = formatDate(task.createdAt);
     checkbox.type = "checkbox";
     checkbox.checked = task.completed;
-    styleRender(checkbox,titleElement)
+    styleRender(checkbox, titleElement);
     liElement.appendChild(titleElement);
     liElement.appendChild(priorityElement);
     liElement.appendChild(dateElement);
     liElement.appendChild(checkbox);
+    liElement.appendChild(deleteButton);
     taskList.appendChild(liElement);
 
     checkbox.addEventListener("change", () => {
       task.completed = checkbox.checked;
-      styleRender(checkbox,titleElement)
-      saveTasks()
+      styleRender(checkbox, titleElement);
+      saveTasks();
+    });
+    deleteButton.addEventListener("click", () => {
+      const taskId = task.id;
+      const taskIndex = tasks.findIndex((item) => taskId === item.id);
+      const result = confirm("Etes vous sur de vouloir supprimer");
+      if (result === false){
+        return;
+      }
+      tasks.splice(taskIndex, 1);
+    
+      saveTasks();
+      renderTasks();
     });
   });
 }
@@ -79,28 +94,27 @@ tasks.push(...loadedTasks);
 
 renderTasks();
 
-
-
 const form = document.querySelector("#taskForm");
 const titleInput = document.querySelector("#taskTitle");
 const priorityInput = document.querySelector("#taskPriority");
 
 form.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const title = titleInput.value.trim();
-    const priority = priorityInput.value;
-    if (title === ""){
-      return alert("Veuillez entrer un titre");
-    }
-    addTask(title, priority)
-    saveTasks();
-    renderTasks();
-    titleInput.value = "";
-    priorityInput.value = "low";
-    console.log(tasks);
+  event.preventDefault();
+  const title = titleInput.value.trim();
+  const priority = priorityInput.value;
+  if (title === "") {
+    return alert("Veuillez entrer un titre");
+  }
+  addTask(title, priority);
+  saveTasks();
+  renderTasks();
+  titleInput.value = "";
+  priorityInput.value = "low";
+  console.log(tasks);
 });
 
-function styleRender(checkbox, titleElement){
-  
-  titleElement.style.textDecoration = checkbox.checked ? "line-through" : "none";
+function styleRender(checkbox, titleElement) {
+  titleElement.style.textDecoration = checkbox.checked
+    ? "line-through"
+    : "none";
 }
