@@ -2,6 +2,7 @@ const tasks = [];
 const taskFilter = document.querySelector("#taskFilter");
 let taskToEdit = null;
 const submitButton = document.querySelector("#submit");
+const taskSort = document.querySelector("#taskSort");
 
 function addTask(title, priority) {
   const newTask = {
@@ -43,7 +44,7 @@ function renderTasks(filterToRender) {
       task.completed = checkbox.checked;
       styleRender(checkbox, titleElement);
       saveTasks();
-      renderTasks(filterTasks(taskFilter.value));
+      renderTasks(getTasksToRender());
     });
     deleteButton.addEventListener("click", () => {
       const taskId = task.id;
@@ -55,7 +56,7 @@ function renderTasks(filterToRender) {
       tasks.splice(taskIndex, 1);
 
       saveTasks();
-      renderTasks(filterTasks(taskFilter.value));
+      renderTasks(getTasksToRender());
     });
     const editButton = document.createElement("button");
     editButton.textContent = "Modifier";
@@ -106,7 +107,7 @@ function loadTasks() {
 const loadedTasks = loadTasks();
 tasks.push(...loadedTasks);
 
-renderTasks(filterTasks(taskFilter.value));
+renderTasks(getTasksToRender());
 
 const form = document.querySelector("#taskForm");
 const titleInput = document.querySelector("#taskTitle");
@@ -130,7 +131,7 @@ form.addEventListener("submit", (event) => {
     addTask(title, priority);
   }
   saveTasks();
-  renderTasks(filterTasks(taskFilter.value));
+  renderTasks(getTasksToRender());
   titleInput.value = "";
   priorityInput.value = "low";
   console.log(tasks);
@@ -153,5 +154,29 @@ function filterTasks(filter) {
 }
 
 taskFilter.addEventListener("change", () => {
-  renderTasks(filterTasks(taskFilter.value));
+  renderTasks(getTasksToRender());
 });
+
+function sortTasksByPriority(taskToSort,order) {
+  const priorityOrder = {
+    high: 3,
+    medium: 2,
+    low: 1,
+  };
+  const copyTasks = [...taskToSort];
+  if( order === "desc"){
+  return copyTasks.sort((a,b)=> priorityOrder[b.priority] - priorityOrder[a.priority])
+}else if (order === "asc"){
+    return copyTasks.sort((a,b)=> priorityOrder[a.priority] - priorityOrder[b.priority])
+
+}
+}
+
+taskSort.addEventListener("change",() =>{
+  renderTasks(getTasksToRender());
+})
+function getTasksToRender() {
+  const filteredTasks = filterTasks(taskFilter.value);
+
+  return sortTasksByPriority(filteredTasks, taskSort.value);
+}

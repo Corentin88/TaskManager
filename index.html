@@ -18,11 +18,17 @@
       </select>
       <button type="submit" id="submit">Valider</button>
     </form>
-
+    <h3>Options pour trier</h3>
+    <span>Status :</span>
     <select id="taskFilter">
       <option value="all">Toutes</option>
       <option value="completed">Terminées</option>
       <option value="pending">En cours</option>
+    </select>
+    <span>Priorité :</span>
+    <select id="taskSort">
+      <option value="asc">Croissante</option>
+      <option value="desc" >Décroissante</option>
     </select>
     <ul id="taskList"></ul>
 
