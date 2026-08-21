@@ -3,9 +3,9 @@ const tasks = [];
 function addTask(title, priority) {
   const newTask = {
     id: crypto.randomUUID(),
-    title: title,
+    title,
     completed: false,
-    priority: priority,
+    priority,
     createdAt: new Date().toISOString(),
   };
   tasks.push(newTask);
@@ -26,9 +26,7 @@ function renderTasks() {
     dateElement.textContent = formatDate(task.createdAt);
     checkbox.type = "checkbox";
     checkbox.checked = task.completed;
-    if (checkbox.checked === true){
-      titleElement.style.textDecoration = "line-through"
-    }
+    styleRender(checkbox,titleElement)
     liElement.appendChild(titleElement);
     liElement.appendChild(priorityElement);
     liElement.appendChild(dateElement);
@@ -37,12 +35,7 @@ function renderTasks() {
 
     checkbox.addEventListener("change", () => {
       task.completed = checkbox.checked;
-      if (checkbox.checked === true) {
-        titleElement.style.textDecoration = "line-through";
-        
-      } else {
-        titleElement.style.textDecoration = "none";
-      }
+      styleRender(checkbox,titleElement)
       saveTasks()
     });
   });
@@ -85,3 +78,29 @@ const loadedTasks = loadTasks();
 tasks.push(...loadedTasks);
 
 renderTasks();
+
+
+
+const form = document.querySelector("#taskForm");
+const titleInput = document.querySelector("#taskTitle");
+const priorityInput = document.querySelector("#taskPriority");
+
+form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const title = titleInput.value.trim();
+    const priority = priorityInput.value;
+    if (title === ""){
+      return alert("Veuillez entrer un titre");
+    }
+    addTask(title, priority)
+    saveTasks();
+    renderTasks();
+    titleInput.value = "";
+    priorityInput.value = "low";
+    console.log(tasks);
+});
+
+function styleRender(checkbox, titleElement){
+  
+  titleElement.style.textDecoration = checkbox.checked ? "line-through" : "none";
+}
