@@ -11,9 +11,6 @@ function addTask(title, priority) {
   tasks.push(newTask);
   return newTask;
 }
-console.log(addTask("test", "medium"));
-console.log(addTask("test2", "High"));
-console.log(addTask("test3", "low"));
 
 function renderTasks() {
   const taskList = document.querySelector("#taskList");
@@ -23,21 +20,36 @@ function renderTasks() {
     const titleElement = document.createElement("span");
     const priorityElement = document.createElement("span");
     const dateElement = document.createElement("span");
+    const checkbox = document.createElement("input");
     titleElement.textContent = task.title;
     priorityElement.textContent = task.priority;
     dateElement.textContent = formatDate(task.createdAt);
+    checkbox.type = "checkbox";
+    checkbox.checked = task.completed;
+    if (checkbox.checked === true){
+      titleElement.style.textDecoration = "line-through"
+    }
     liElement.appendChild(titleElement);
     liElement.appendChild(priorityElement);
     liElement.appendChild(dateElement);
-
+    liElement.appendChild(checkbox);
     taskList.appendChild(liElement);
+
+    checkbox.addEventListener("change", () => {
+      task.completed = checkbox.checked;
+      if (checkbox.checked === true) {
+        titleElement.style.textDecoration = "line-through";
+        
+      } else {
+        titleElement.style.textDecoration = "none";
+      }
+      saveTasks()
+    });
   });
 }
 
-renderTasks();
-
 function formatDate(date) {
-    const dateObject = new Date(date)
+  const dateObject = new Date(date);
   const day = dateObject.getDate();
   const month = dateObject.getMonth() + 1;
   const year = dateObject.getFullYear();
@@ -55,3 +67,21 @@ function formatDate(date) {
     String(minutes).padStart(2, "0")
   );
 }
+
+function saveTasks() {
+  const data = JSON.stringify(tasks);
+  localStorage.setItem("tasks", data);
+  console.log(data);
+  console.log(localStorage);
+}
+
+function loadTasks() {
+  const data = localStorage.getItem("tasks");
+  const loadedTasks = JSON.parse(data) ?? [];
+  return loadedTasks;
+}
+
+const loadedTasks = loadTasks();
+tasks.push(...loadedTasks);
+
+renderTasks();
