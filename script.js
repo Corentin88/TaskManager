@@ -3,6 +3,7 @@ const taskFilter = document.querySelector("#taskFilter");
 let taskToEdit = null;
 const submitButton = document.querySelector("#submit");
 const taskSort = document.querySelector("#taskSort");
+const taskSearch = document.querySelector("#taskSearch");
 
 function addTask(title, priority) {
   const newTask = {
@@ -157,26 +158,40 @@ taskFilter.addEventListener("change", () => {
   renderTasks(getTasksToRender());
 });
 
-function sortTasksByPriority(taskToSort,order) {
+function sortTasksByPriority(taskToSort, order) {
   const priorityOrder = {
     high: 3,
     medium: 2,
     low: 1,
   };
   const copyTasks = [...taskToSort];
-  if( order === "desc"){
-  return copyTasks.sort((a,b)=> priorityOrder[b.priority] - priorityOrder[a.priority])
-}else if (order === "asc"){
-    return copyTasks.sort((a,b)=> priorityOrder[a.priority] - priorityOrder[b.priority])
-
+  if (order === "desc") {
+    return copyTasks.sort(
+      (a, b) => priorityOrder[b.priority] - priorityOrder[a.priority],
+    );
+  } else if (order === "asc") {
+    return copyTasks.sort(
+      (a, b) => priorityOrder[a.priority] - priorityOrder[b.priority],
+    );
+  }
 }
-}
 
-taskSort.addEventListener("change",() =>{
+taskSort.addEventListener("change", () => {
   renderTasks(getTasksToRender());
-})
+});
+
 function getTasksToRender() {
   const filteredTasks = filterTasks(taskFilter.value);
+  const searchedTasks = searchTasks(filteredTasks, taskSearch.value);
+  return sortTasksByPriority(searchedTasks, taskSort.value);
+}
 
-  return sortTasksByPriority(filteredTasks, taskSort.value);
+
+taskSearch.addEventListener("input", () => {
+  renderTasks(getTasksToRender());
+});
+
+function searchTasks(taskToSearch ,search) {
+  const searchValue = search.toLowerCase();
+  return taskToSearch.filter((task) => task.title.toLowerCase().includes(searchValue));
 }
