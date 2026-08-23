@@ -4,6 +4,7 @@ let taskToEdit = null;
 const submitButton = document.querySelector("#submit");
 const taskSort = document.querySelector("#taskSort");
 const taskSearch = document.querySelector("#taskSearch");
+const countTasks = document.querySelector("#countTask");
 
 function addTask(title, priority) {
   const newTask = {
@@ -44,6 +45,7 @@ function renderTasks(filterToRender) {
     checkbox.addEventListener("change", () => {
       task.completed = checkbox.checked;
       styleRender(checkbox, titleElement);
+      renderCompletedCount();
       saveTasks();
       renderTasks(getTasksToRender());
     });
@@ -55,7 +57,7 @@ function renderTasks(filterToRender) {
         return;
       }
       tasks.splice(taskIndex, 1);
-
+      renderCompletedCount();
       saveTasks();
       renderTasks(getTasksToRender());
     });
@@ -69,7 +71,6 @@ function renderTasks(filterToRender) {
       titleInput.value = tasks[taskIndex].title;
       priorityInput.value = tasks[taskIndex].priority;
       taskToEdit = taskId;
-      console.log("🚀 ~ renderTasks ~ taskToEdit:", taskToEdit);
     });
   });
 }
@@ -109,6 +110,7 @@ const loadedTasks = loadTasks();
 tasks.push(...loadedTasks);
 
 renderTasks(getTasksToRender());
+renderCompletedCount();
 
 const form = document.querySelector("#taskForm");
 const titleInput = document.querySelector("#taskTitle");
@@ -130,12 +132,12 @@ form.addEventListener("submit", (event) => {
     submitButton.textContent = "Valider";
   } else {
     addTask(title, priority);
+    renderCompletedCount();
   }
   saveTasks();
   renderTasks(getTasksToRender());
   titleInput.value = "";
   priorityInput.value = "low";
-  console.log(tasks);
 });
 
 function styleRender(checkbox, titleElement) {
@@ -186,12 +188,22 @@ function getTasksToRender() {
   return sortTasksByPriority(searchedTasks, taskSort.value);
 }
 
-
 taskSearch.addEventListener("input", () => {
   renderTasks(getTasksToRender());
 });
 
-function searchTasks(taskToSearch ,search) {
+function searchTasks(taskToSearch, search) {
   const searchValue = search.toLowerCase();
-  return taskToSearch.filter((task) => task.title.toLowerCase().includes(searchValue));
+  return taskToSearch.filter((task) =>
+    task.title.toLowerCase().includes(searchValue),
+  );
+}
+
+function countCompletedTasks() {
+  return tasks.filter((task) => task.completed).length;
+}
+
+function renderCompletedCount() {
+  const tasksLength = tasks.length;
+  countTasks.textContent = ` ${countCompletedTasks()} /  ${tasksLength} tâche(s) terminée(s)`;
 }
