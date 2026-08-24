@@ -1,16 +1,31 @@
 import { loadTasks, saveTasks } from "./storage.js";
-import { addTask, filterTasks, searchTasks, sortTasksByPriority } from "./tasks.js";
-import { taskFilter, taskSearch, taskSort,form, titleInput, priorityInput, submitButton, renderTasks, renderCompletedCount } from "./ui.js";
+import {
+  addTask,
+  filterTasks,
+  searchTasks,
+  sortTasksByPriority,
+} from "./tasks.js";
+import {
+  taskFilter,
+  taskSearch,
+  taskSort,
+  form,
+  titleInput,
+  priorityInput,
+  submitButton,
+  renderTasks,
+  renderCompletedCount,
+} from "./ui.js";
 import { tasks, setTaskToEdit, taskToEdit } from "./state.js";
 
-
-
+// Refresh the task list according to the current filter, search and sort settings.
 function refreshTasks() {
   const tasksToRender = getTasksToRender();
 
   renderTasks(tasksToRender, updateUI);
 }
 
+// Synchronize the data and refresh all UI elements affected by a task change.
 export function updateUI() {
   saveTasks();
   renderCompletedCount(tasks);
@@ -24,6 +39,7 @@ function getTasksToRender() {
   return sortTasksByPriority(searchedTasks, taskSort.value);
 }
 
+// Load saved tasks when the application starts.
 const loadedTasks = loadTasks();
 tasks.push(...loadedTasks);
 

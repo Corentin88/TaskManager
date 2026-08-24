@@ -1,5 +1,6 @@
 import { tasks } from "./state.js";
 
+// Numeric values used to compare task priorities when sorting.
 const priorityOrder = {
   high: 3,
   medium: 2,
@@ -24,7 +25,7 @@ export function filterTasks(filter) {
     completed: (task) => task.completed,
     pending: (task) => !task.completed,
   };
-
+  // Use the selected filter or return all tasks if no filter matches.
   return filters[filter]
     ? tasks.filter(filters[filter])
     : tasks;
@@ -39,6 +40,7 @@ export function searchTasks(taskToSearch, search) {
 
 export function sortTasksByPriority(tasksToSort, order) {
   const copyTasks = [...tasksToSort];
+  // Determine sort direction based on the selected order.
   const direction = order === "asc" ? 1 : -1;
 
   return copyTasks.sort(

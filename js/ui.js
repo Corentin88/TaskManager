@@ -1,6 +1,11 @@
 import { formatDate } from "./utils.js";
-import { handleTaskCompletion, handleTaskDeletion, handleTaskEdit } from "./taskAction.js";
+import {
+  handleTaskCompletion,
+  handleTaskDeletion,
+  handleTaskEdit,
+} from "./taskAction.js";
 
+// DOM elements used to interact with and update the user interface.
 export const taskFilter = document.querySelector("#taskFilter");
 export const submitButton = document.querySelector("#submit");
 export const taskSort = document.querySelector("#taskSort");
@@ -10,7 +15,6 @@ export const form = document.querySelector("#taskForm");
 export const titleInput = document.querySelector("#taskTitle");
 export const priorityInput = document.querySelector("#taskPriority");
 export const taskList = document.querySelector("#taskList");
-
 
 export function createTaskElement(task, updateUI) {
   const liElement = document.createElement("li");
@@ -42,12 +46,15 @@ export function createTaskElement(task, updateUI) {
   checkbox.addEventListener("change", () => {
     handleTaskCompletion(task, checkbox, updateUI);
   });
+
   deleteButton.addEventListener("click", () => {
     handleTaskDeletion(task, updateUI);
   });
+
   editButton.addEventListener("click", () => {
     handleTaskEdit(task, submitButton, titleInput, priorityInput);
   });
+
   return liElement;
 }
 

@@ -1,6 +1,6 @@
 import { tasks, setTaskToEdit } from "./state.js";
-import { updateUI } from "./main.js";
 
+// Callback used to refresh the UI after a task is modified.
 export function handleTaskCompletion(task, checkbox, updateUI) {
   task.completed = checkbox.checked;
 

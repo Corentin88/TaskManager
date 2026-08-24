@@ -1,4 +1,4 @@
-
+// Formats an ISO date string into a human-readable French date and time.
 export function formatDate(date) {
   const dateObject = new Date(date);
   const day = dateObject.getDate();
