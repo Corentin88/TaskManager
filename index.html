@@ -1,42 +1,94 @@
 <!doctype html>
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TaskManager</title>
+    <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
-    <h1>FORMULAIRE</h1>
-    <form id="taskForm">
-      <span>Titre</span>
-      <input type="text" id="taskTitle" required />
-      <span>Select</span>
-      <select id="taskPriority">
-        <option value="low">Low</option>
-        <option value="medium">Medium</option>
-        <option value="high">High</option>
-      </select>
-      <button type="submit" id="submit">Valider</button>
-    </form>
-    <search>
-      <span>Recherche</span>
-      <input type="search" id="taskSearch">
-    </search>
-    <p>Compteur de Tâche</p>
-    <span id="countTask"></span>
-    <h3>Options pour trier</h3>
-    <span>Status :</span>
-    <select id="taskFilter">
-      <option value="all">Toutes</option>
-      <option value="completed">Terminées</option>
-      <option value="pending">En cours</option>
-    </select>
-    <span>Priorité :</span>
-    <select id="taskSort">
-      <option value="asc">Croissante</option>
-      <option value="desc" >Décroissante</option>
-    </select>
-    <ul id="taskList"></ul>
+    <header>
+      <h1>Gestionnaire de tâches</h1>
+    </header>
+
+    <main>
+      <section id="createTask">
+        <h2>Créer ou modifier une tâche</h2>
+        <form id="taskForm">
+          <div id="taskFormInputs">
+            <label for="taskTitle">Nom de la tâche:</label>
+            <input
+              type="text"
+              id="taskTitle"
+              name="taskTitle"
+              placeholder="Acheter de la RAM..."
+              required
+            />
+            <label for="taskPriority">Priorité:</label>
+            <select id="taskPriority" name="taskPriority">
+              <option value="faible">Faible</option>
+              <option value="moyenne">Moyenne</option>
+              <option value="haute">Haute</option>
+            </select>
+          </div>
+          <div id="taskFormSubmit">
+            <button type="submit" id="submit">Valider</button>
+          </div>
+        </form>
+      </section>
+
+      <div id="searchAndCount">
+        <section id="searchSection">
+          <h2>Rechercher une tâche</h2>
+          <search>
+            <label for="taskSearch">Recherche:</label>
+            <input
+              type="search"
+              id="taskSearch"
+              name="taskSearch"
+              placeholder="Vendre Bitcoin..."
+            />
+          </search>
+        </section>
+        <section id="countSection">
+          <h2>État des tâches</h2>
+          <p>
+            Tâches terminées :
+            <span id="countTask"></span>
+          </p>
+        </section>
+      </div>
+      <div id="filterAndSortContainerWrapper">
+        <section id="filterAndSort">
+          <h2>Filtrer et trier les tâches</h2>
+          <div id="filterAndSortContainer">
+            <div>
+              <label for="taskFilter">Statut :</label>
+              <select id="taskFilter" name="taskFilter">
+                <option value="all">Toutes</option>
+                <option value="completed">Terminées</option>
+                <option value="pending">En cours</option>
+              </select>
+            </div>
+            <div>
+              <label for="taskSort">Priorité :</label>
+              <select id="taskSort" name="taskSort">
+                <option value="asc">Croissante</option>
+                <option value="desc">Décroissante</option>
+              </select>
+            </div>
+          </div>
+        </section>
+      </div>
+      <section id="taskListSection">
+        <h2>Liste des tâches</h2>
+        <ul id="taskList"></ul>
+      </section>
+    </main>
+
+    <footer>
+      <p>© 2026 TaskManager - Exercice de formation JavaScript</p>
+    </footer>
 
     <script type="module" src="./js/main.js"></script>
   </body>

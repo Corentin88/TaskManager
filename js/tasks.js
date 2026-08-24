@@ -2,9 +2,9 @@ import { tasks } from "./state.js";
 
 // Numeric values used to compare task priorities when sorting.
 const priorityOrder = {
-  high: 3,
-  medium: 2,
-  low: 1,
+  faible: 1,
+  moyenne: 2,
+  haute: 3,
 };
 
 

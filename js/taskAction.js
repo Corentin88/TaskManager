@@ -21,10 +21,12 @@ export function handleTaskDeletion(task, updateUI) {
   updateUI();
 }
 
-export function handleTaskEdit(task) {
+export function handleTaskEdit(task, submitButton, titleInput, priorityInput) {
   submitButton.textContent = "Modifier";
   titleInput.value = task.title;
   priorityInput.value = task.priority;
 
   setTaskToEdit(task.id);
+
+  titleInput.focus();
 }

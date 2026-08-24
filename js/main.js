@@ -72,7 +72,7 @@ form.addEventListener("submit", (event) => {
   updateUI();
 
   titleInput.value = "";
-  priorityInput.value = "low";
+  priorityInput.value = "faible";
 });
 
 taskFilter.addEventListener("change", () => {
